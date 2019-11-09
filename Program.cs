@@ -1,20 +1,22 @@
 ﻿using System;
 
-namespace Matrices
+namespace GaussElimination
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var m = new Matrix<double>(2, 2);
-			var n = new Matrix<double>(2, 2);
-			m.MultiplyMatrix(n);
-			var x = new Matrix<float>(2, 10);
-			Console.WriteLine(x.ToString());
-			var d = new Matrix<float>(10, 2);
-			Console.WriteLine(d.ToString());
-			var xd = x.MultiplyMatrix(d);
-			Console.WriteLine(xd.ToString());
+			var size = 4;
+
+            var m = new Matrix<double>(size);
+			m.FillMatrix();
+			var n = new Matrix<double>(size);
+
+			Elimination<double> elimination = new Elimination<double>();
+
+			Console.Out.WriteLine(elimination.Eliminate(m));
+			Console.Out.WriteLine(elimination.EliminateWithPartialPivoting(m));
+			Console.Out.WriteLine(elimination.EliminateWithFullPivoting(m));
 		}
 
 	}

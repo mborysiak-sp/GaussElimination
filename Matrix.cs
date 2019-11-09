@@ -4,42 +4,41 @@ using System.Globalization;
 using System.Numerics;
 using System.Text;
 
-namespace Matrices
+namespace GaussElimination
 {
-	class Matrix<T>
+	[Serializable]
+	public class Matrix<T> : Support
 	{
-		private T[,] Fields { get; set; }
-		private int Columns { get; set; }
-		private int Rows { get; set; }
 
-		public Matrix(int rows, int columns)
+		public T[,] Fields { get ; set; }
+		public int Size { get; set; }
+
+		public Matrix(int size)
 		{
-			Columns = columns;
-			Rows = rows;
-			Fields = new T[rows, columns];
-			FillMatrix();
+			Size = size;
+			Fields = new T[Size, Size];
 		}
-
-		private void FillMatrix()
+		
+		public void FillMatrix()
 		{
-			for (int i = 0; i < Rows; i++)
-				for (int j = 0; j < Columns; j++)
-					Fields[i, j] = GetRandomNumber();
+			for (int i = 0; i < Size; i++)
+				for (int j = 0; j < Size; j++)
+					Fields[i, j] = GetRandomNumber(typeof(T));
 		}
 
 		public Matrix<T> MultiplyMatrix(Matrix<T> matrix)
 		{
-			Matrix<T> result = new Matrix<T>(Rows, matrix.Columns);
+			Matrix<T> result = new Matrix<T>(Size);
 
 			dynamic sum;
 
-			for (int i = 0; i < Rows; i++)
+			for (int i = 0; i < Size; i++)
 			{
-				for (int j = 0; j < matrix.Columns; j++)
+				for (int j = 0; j < Size; j++)
 				{
 					sum = 0;
 
-					for (int k = 0; k < Rows; k++)
+					for (int k = 0; k < Size; k++)
 						sum += (dynamic)Fields[i, k] * (dynamic)matrix.Fields[k, j];
 
 					result.Fields[i, j] = sum;
@@ -48,43 +47,13 @@ namespace Matrices
 			return result;
 		}
 
-
-		private dynamic GetRandomR()
-		{
-			double minimum = -Math.Pow(2, 16);
-			double maximum = Math.Pow(2, 16) - 1;
-
-			Random rand = new Random();
-
-			return rand.NextDouble() * (maximum - minimum) + minimum;
-		}
-
-		private T GetRandomNumber()
-		{
-			Random rand = new Random();
-			if (typeof(T) == typeof(double))
-				return (T)(object)(GetRandomR() / Math.Pow(2, 16));
-
-			if (typeof(T) == typeof(float))
-				return (T)(object)Convert.ToSingle(GetRandomR() / Math.Pow(2, 16));
-
-			//        if (typeof(T) == typeof(SuperType))
-			//        {
-			//            var values = (GetRandomR() / Math.Pow(2, 16)).ToString().Split('.');
-			//            var obj = (T)(object)new SuperType(values[0], values[1]);
-			//return obj;
-			//        }
-
-			else return default;
-		}
-
 		public bool Equals(Matrix<T> matrix)
 		{
-			if (Rows != matrix.Rows || Columns != matrix.Columns)
+			if (Size != matrix.Size)
 				return false;
 			else
-				for (int i = 0; i < Rows; i++)
-					for (int j = 0; j < Columns; j++)
+				for (int i = 0; i < Size; i++)
+					for (int j = 0; j < Size; j++)
 						if ((dynamic)Fields[i, j] != (dynamic)matrix.Fields[i, j])
 							return false;
 			return true;
@@ -94,9 +63,9 @@ namespace Matrices
 		{
 			string result = "";
 
-			for (int i = 0; i < Rows; i++)
+			for (int i = 0; i < Size; i++)
 			{
-				for (int j = 0; j < Columns; j++)
+				for (int j = 0; j < Size; j++)
 					result += $"{Fields[i, j]} \t";
 
 				result += "\n";

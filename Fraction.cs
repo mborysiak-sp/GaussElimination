@@ -4,17 +4,17 @@ using System.Text;
 using System.Numerics;
 using System.Globalization;
 
-namespace Matrices
+namespace GaussElimination
 {
-    class SuperType
+    class Fraction
     {
         private BigInteger Denominator { get; set; }
-        private float Numerator { get; set; }
+        private BigInteger Numerator { get; set; }
 
-        public SuperType(string numerator, string denominator)
+        public Fraction(string numerator, string denominator)
         {
             Denominator = BigInteger.Parse(denominator);
-			Numerator = float.Parse(numerator);
+			Numerator = BigInteger.Parse(numerator);
         }
 
 		//private BigInteger ConvertToBigInteger(string number)
@@ -26,7 +26,7 @@ namespace Matrices
 		//		return bigInt;
 		//}
 
-        public bool Equals(SuperType obj)
+        public bool Equals(Fraction obj)
         {
             if (obj.Denominator == Denominator && obj.Numerator == Numerator)
                 return true;
