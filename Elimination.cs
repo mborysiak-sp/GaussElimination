@@ -60,9 +60,10 @@ namespace GaussElimination
 
 			for (int i = 0; i < results.Size; i++)
 			{
-				int positionI, positionJ;
-				positionI = GetFullPivot(results).Item1;
-				positionJ = GetFullPivot(results).Item2;
+
+				int positionI = GetFullPivot(results).Item1;
+				int positionJ = GetFullPivot(results).Item2;
+
 				SwitchRows(results, i, positionI);
 				SwitchColumns(results, i, positionJ);
 
