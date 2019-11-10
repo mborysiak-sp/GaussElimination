@@ -11,34 +11,43 @@ namespace GaussElimination
 	{
 
 		public T[,] Fields { get ; set; }
-		public int Size { get; set; }
+		public int Rows { get; set; }
+		public int Columns { get; set; }
 
 		public Matrix(int size)
 		{
-			Size = size;
-			Fields = new T[Size, Size];
+			Rows = size;
+			Columns = size;
+			Fields = new T[Rows, Columns];
+		}
+
+		public Matrix(int rows, int columns)
+		{
+			Rows = rows;
+			Columns = columns;
+			Fields = new T[Rows, Columns];
 		}
 		
 		public void FillMatrix()
 		{
-			for (int i = 0; i < Size; i++)
-				for (int j = 0; j < Size; j++)
+			for (int i = 0; i < Rows; i++)
+				for (int j = 0; j < Columns; j++)
 					Fields[i, j] = GetRandomNumber(typeof(T));
 		}
 
 		public Matrix<T> MultiplyMatrix(Matrix<T> matrix)
 		{
-			Matrix<T> result = new Matrix<T>(Size);
+			Matrix<T> result = new Matrix<T>(Rows, matrix.Columns);
 
 			dynamic sum;
 
-			for (int i = 0; i < Size; i++)
+			for (int i = 0; i < Rows; i++)
 			{
-				for (int j = 0; j < Size; j++)
+				for (int j = 0; j < Columns; j++)
 				{
 					sum = 0;
 
-					for (int k = 0; k < Size; k++)
+					for (int k = 0; k < Rows; k++)
 						sum += (dynamic)Fields[i, k] * (dynamic)matrix.Fields[k, j];
 
 					result.Fields[i, j] = sum;
@@ -49,11 +58,11 @@ namespace GaussElimination
 
 		public bool Equals(Matrix<T> matrix)
 		{
-			if (Size != matrix.Size)
+			if (Rows != matrix.Rows && Columns != matrix.Columns)
 				return false;
 			else
-				for (int i = 0; i < Size; i++)
-					for (int j = 0; j < Size; j++)
+				for (int i = 0; i < Rows; i++)
+					for (int j = 0; j < Columns; j++)
 						if ((dynamic)Fields[i, j] != (dynamic)matrix.Fields[i, j])
 							return false;
 			return true;
@@ -63,9 +72,9 @@ namespace GaussElimination
 		{
 			string result = "";
 
-			for (int i = 0; i < Size; i++)
+			for (int i = 0; i < Rows; i++)
 			{
-				for (int j = 0; j < Size; j++)
+				for (int j = 0; j < Columns; j++)
 					result += $"{Fields[i, j]} \t";
 
 				result += "\n";
