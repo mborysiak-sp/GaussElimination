@@ -83,21 +83,23 @@ namespace GaussElimination
 
 			return results;
 		}
+
 		//https://www.bragitoff.com/2018/02/gauss-elimination-c-program/
+		//https://www.sanfoundry.com/java-program-gaussian-elimination-algorithm/
 		private Matrix<T> GetResults(Matrix<T> matrix)
 		{
 			var results = new Matrix<T>(matrix.Rows, 1);
 			
 			for (int i = matrix.Rows - 1; i >= 0; i--)
 			{
-				results.Fields[i, 0] = matrix.Fields[i, matrix.Columns - 1];
+				dynamic sum = 0;
 
 				for (int j = i + 1; j < matrix.Rows; j++)
-				{
-					results.Fields[i, 0] = (dynamic)results.Fields[i, 0] - (dynamic)matrix.Fields[i, j] * (dynamic)results.Fields[j, 0];
-				}
-				results.Fields[i, 0] = (dynamic)results.Fields[i, 0] / (dynamic)matrix.Fields[i, i];
+					sum += (dynamic)matrix.Fields[i, j] * (dynamic)results.Fields[j, 0];
+
+				results.Fields[i, 0] = (matrix.Fields[i, matrix.Columns - 1] - sum) / matrix.Fields[i, i];
 			}
+
 			return results;
 		}
 

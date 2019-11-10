@@ -35,24 +35,42 @@ namespace GaussElimination
 					Fields[i, j] = GetRandomNumber(typeof(T));
 		}
 
-		public Matrix<T> MultiplyMatrix(Matrix<T> matrix)
+		public Matrix<T> Multiply(Matrix<T> matrix)
 		{
-			Matrix<T> result = new Matrix<T>(Rows, matrix.Columns);
+			Matrix<T> results = new Matrix<T>(Rows, matrix.Columns);
 
 			dynamic sum;
 
 			for (int i = 0; i < Rows; i++)
 			{
-				for (int j = 0; j < Columns; j++)
+				for (int j = 0; j < matrix.Columns; j++)
 				{
 					sum = 0;
 
-					for (int k = 0; k < Rows; k++)
+					for (int k = 0; k < matrix.Rows; k++)
 						sum += (dynamic)Fields[i, k] * (dynamic)matrix.Fields[k, j];
 
-					result.Fields[i, j] = sum;
+					results.Fields[i, j] = sum;
 				}
 			}
+			return results;
+		}
+
+		public Matrix<T> ConcatenateWithVector(Matrix<T> vector)
+		{
+			var result = new Matrix<T>(Rows, Columns + 1);
+
+			for (int i = 0; i < Rows; i++)
+			{
+				for (int j = 0; j < Columns + 1; j++)
+				{
+					if (j == Columns)
+						result.Fields[i, j] = vector.Fields[i, 0];
+					else
+						result.Fields[i, j] = Fields[i, j];
+				}
+			}
+
 			return result;
 		}
 
