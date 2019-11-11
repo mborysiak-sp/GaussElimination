@@ -7,7 +7,7 @@ using System.Text;
 namespace GaussElimination
 {
 	[Serializable]
-	public class Matrix<T> : Support
+	public class Matrix<T> : Support where T : new()
 	{
 
 		public T[,] Fields { get ; set; }
@@ -39,13 +39,11 @@ namespace GaussElimination
 		{
 			Matrix<T> results = new Matrix<T>(Rows, matrix.Columns);
 
-			dynamic sum;
-
 			for (int i = 0; i < Rows; i++)
 			{
 				for (int j = 0; j < matrix.Columns; j++)
 				{
-					sum = 0;
+					T sum = new T();
 
 					for (int k = 0; k < matrix.Rows; k++)
 						sum += (dynamic)Fields[i, k] * (dynamic)matrix.Fields[k, j];
@@ -72,6 +70,43 @@ namespace GaussElimination
 			}
 
 			return result;
+		}
+
+		public Matrix<T> Difference(Matrix<T> matrix)
+		{
+			var results = Clone(this);
+			for (int i = 0; i < Rows; i++)
+				for (int j = 0; j < Columns; j++)
+					results.Fields[i, j] = (dynamic)Fields[i, j] - (dynamic)matrix.Fields[i,j];
+			return results;
+		}
+
+		public void SwitchRows(int row1, int row2)
+		{
+			for (int i = 0; i < Columns; i++)
+			{
+				T temp;
+
+				temp = Fields[row1, i];
+
+				Fields[row1, i] = Fields[row2, i];
+
+				Fields[row2, i] = temp;
+			}
+		}
+
+		public void SwitchColumns(int col1, int col2)
+		{
+			for (int i = 0; i < Rows; i++)
+			{
+				T temp;
+
+				temp = Fields[col1, i];
+
+				Fields[col1, i] = Fields[col2, i];
+
+				Fields[col2, i] = temp;
+			}
 		}
 
 		public bool Equals(Matrix<T> matrix)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -10,14 +11,36 @@ namespace GaussElimination
 	[Serializable]
 	public class Support
 	{
-		private double GetRandomR()
+		protected dynamic Abs(Type type, dynamic value)
 		{
-			double minimum = -Math.Pow(2, 16);
-			double maximum = Math.Pow(2, 16) - 1;
+			if (type == typeof(double))
+				return Math.Abs(value);
+
+			if (type == typeof(float))
+				return Math.Abs(value);
+
+			if (type == typeof(Fraction))
+				return GetRandomFraction();
+
+			else return null;
+		}
+
+		private Fraction AbsForFraction(Fraction value)
+		{
+			if (value.Numerator < 0)
+				return new Fraction(BigInteger.Negate(value.Numerator), value.Denominator);
+			else
+				return value;
+		}
+
+		private int GetRandomR()
+		{
+			int minimum = (int)Math.Round(-Math.Pow(2, 16));
+			int maximum = (int)Math.Round(Math.Pow(2, 16) - 1);
 
 			Random rand = new Random();
 
-			return rand.NextDouble() * (maximum - minimum) + minimum;
+			return rand.Next(minimum, maximum);
 		}
 
 		protected double GetRandomDouble()
@@ -25,11 +48,10 @@ namespace GaussElimination
 			return GetRandomR() / Math.Pow(2, 16);
 		}
 
-		//protected Fraction GetRandomFraction()
-		//{
-		//	Random rand = new Random();
-
-		//}
+		protected Fraction GetRandomFraction()
+		{
+			return new Fraction(GetRandomR().ToString(), Math.Pow(2, 16).ToString());
+		}
 
 		protected float GetRandomFloat()
 		{
@@ -43,6 +65,9 @@ namespace GaussElimination
 
 			if (type == typeof(float))
 				return GetRandomFloat();
+
+			if (type == typeof(Fraction))
+				return GetRandomFraction();
 
 			else return null;
 		}

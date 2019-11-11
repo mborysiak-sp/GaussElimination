@@ -7,45 +7,56 @@ namespace GaussElimination
     {
         static void Main(string[] args)
         {
-			var size = 3;
+			var size = 4;
 
-            var a = new Matrix<double>(size);
-			a.FillMatrix();
-			var x = new Matrix<double>(size, 1);
-			x.FillMatrix();
+            //var a = new Matrix<Fraction>(size);
+			//a.FillMatrix();
+			//var x = new Matrix<Fraction>(size, 1);
+			//x.FillMatrix();
+			//var b = a.Multiply(x);
 
-			Elimination<double> elimination = new Elimination<double>();
+			var elimination = new Elimination<Fraction>();
+			//Console.WriteLine($"a: \n {a}");
+			//Console.WriteLine($"x: \n {x}");
+			//Console.WriteLine($"b: \n {b}");
 
-			Console.WriteLine($"x: \n {x}");
-
-			Console.WriteLine($"Simple: \n {elimination.Eliminate(a.ConcatenateWithVector(a.Multiply(x)))}");
-			//Console.Out.WriteLine(elimination.Eliminate(a.ConcatenateWithVector(a.Multiply(x))));
-			Console.WriteLine($"Pivot: \n {elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(a.Multiply(x)))}");
+			//Console.WriteLine($"Simple: \n {elimination.Eliminate(a.ConcatenateWithVector(b))}");
+			//Console.Out.WriteLine(elimination.Eliminate(a.ConcatenateWithVector(b)));
+			//Console.WriteLine($"Pivot: \n {elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b))}");
 			//Console.Out.WriteLine(elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(a.Multiply(x))));
 			//Console.Out.WriteLine(elimination.EliminateWithFullPivoting(m));
 
-			//for (int i = 0; i < 10; i++)
-			//{
-			//	Stopwatch stopwatch = new Stopwatch();
+			for (int i = 0; i < 1; i++)
+			{
+				var a = new Matrix<Fraction>(size);
+				a.FillMatrix();
+				var x = new Matrix<Fraction>(size, 1);
+				x.FillMatrix();
+				var b = a.Multiply(x);
+				Console.WriteLine(x);
+				Stopwatch stopwatch = new Stopwatch();
 
-			//	stopwatch.Start();
+				stopwatch.Start();
 
-			//	elimination.Eliminate(m);
+				Console.WriteLine(x.Difference(elimination.Eliminate(a.ConcatenateWithVector(b))));
 
-			//	stopwatch.Stop();
+				stopwatch.Stop();
 
-			//	Console.WriteLine($" NONE: {stopwatch.ElapsedMilliseconds}");
+				Console.WriteLine($"NONE: \n{stopwatch.Elapsed}");
 
-			//	stopwatch.Reset();
+				//Console.WriteLine($" NONE: {elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b))}");
 
-			//	stopwatch.Start();
+				stopwatch.Reset();
 
-			//	elimination.EliminateWithPartialPivoting(m);
+				stopwatch.Start();
 
-			//	stopwatch.Stop();
+				Console.WriteLine(x.Difference(elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b))));
 
-			//	Console.WriteLine($" PARTIAL: {stopwatch.ElapsedMilliseconds}");
-			//}
+				stopwatch.Stop();
+
+				Console.WriteLine($"PARTIAL: \n{stopwatch.Elapsed}");
+				//Console.WriteLine($" PARTIAL: {stopwatch.ElapsedMilliseconds}");
+			}
 		}
 			
 
