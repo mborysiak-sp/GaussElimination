@@ -34,48 +34,78 @@ namespace GaussElimination
 
 			for (int i = 0; i < results.Rows - 1; i++)
 			{
-				for (int k = i + 1; k < results.Rows; k++)
-					if (Abs(typeof(T), results.Fields[i, i]) < Abs(typeof(T), results.Fields[k, i]))
-						results.SwitchRows(k, i);
+				for (int j = i; j < results.Rows; j++)
+					if (Abs(typeof(T), results.Fields[i, i]) < Abs(typeof(T), results.Fields[j, i]))
+						results.SwitchRows(i, j);
 
 				ZeroColumn(results, i);
 			}
 
-			return GetResults(results); ;
+			return GetResults(results);
 		}
 
 		public Matrix<T> EliminateWithFullPivoting(Matrix<T> matrix)
 		{
 			var results = Clone(matrix);
+			var swapList = new List<Tuple<int, int>>();
 
 			for (int i = 0; i < results.Rows; i++)
 			{
-
-				int positionI = GetFullPivot(results).Item1;
-				int positionJ = GetFullPivot(results).Item2;
-
-				//SwitchRows(results, i, positionI);
-				//SwitchColumns(results, i, positionJ);
-
-				for (int j = 0; j < results.Columns; j++)
+				for (int j = i; j < results.Rows; j++)
 				{
-					if (i > j)
+					for (int k = i; k < results.Columns - 1; k++)
 					{
-						T m = (dynamic)results.Fields[i, j] / (dynamic)results.Fields[j, j];
-
-						for (int k = 0; k < results.Rows; k++)
+						if (Abs(typeof(T), results.Fields[i, i]) < Abs(typeof(T), results.Fields[j, k]))
 						{
-							results.Fields[i, k] -= (dynamic)results.Fields[j, k] * m;
+							//Console.WriteLine(results);
+
+							//Console.WriteLine($"{results.Fields[i, i]} < {results.Fields[j, k]}");
+
+							//Console.WriteLine($"Switching columns {i},{k}");
+
+							swapList.Add(new Tuple<int, int>(i, k));
+
+							results.SwitchColumns(i, k);
+
+							//Console.WriteLine($"Switching rows {i},{j}");
+
+							results.SwitchRows(i, j);
+
+							//Console.WriteLine(results);
 						}
 					}
 				}
+	
+				ZeroColumn(results, i);
 			}
 
-			return results;
+			return GetResults(FixColumns(results, swapList));
 		}
 
 		//https://www.bragitoff.com/2018/02/gauss-elimination-c-program/
 		//https://www.sanfoundry.com/java-program-gaussian-elimination-algorithm/
+
+		private Matrix<T> FixColumns(Matrix<T> matrix, List<Tuple<int, int>> swapList)
+		{
+			T[] outArr = new T[matrix.Rows];
+
+			for (int i = 0; i < matrix.Rows; i++)
+				outArr[i] = matrix.Fields[i, matrix.Columns - 1];
+
+			swapList.Reverse();
+			foreach (Tuple<int, int> swap in swapList)
+			{
+				T temp = outArr[swap.Item1];
+				outArr[swap.Item1] = outArr[swap.Item2];
+				outArr[swap.Item2] = temp;
+			}
+
+			for (int i = 0; i < matrix.Rows; i++)
+				matrix.Fields[i, matrix.Columns - 1] = outArr[i];
+
+			return matrix;
+		}
+
 		private Matrix<T> GetResults(Matrix<T> matrix)
 		{
 			var results = new Matrix<T>(matrix.Rows, 1);

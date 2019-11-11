@@ -101,11 +101,11 @@ namespace GaussElimination
 			{
 				T temp;
 
-				temp = Fields[col1, i];
+				temp = Fields[i, col1];
 
-				Fields[col1, i] = Fields[col2, i];
+				Fields[i, col1] = Fields[i, col2];
 
-				Fields[col2, i] = temp;
+				Fields[i, col2] = temp;
 			}
 		}
 

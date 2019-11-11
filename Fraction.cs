@@ -50,7 +50,6 @@ namespace GaussElimination
 				Numerator = BigInteger.Negate(Numerator);
 				Denominator = BigInteger.Negate(Denominator);
 			}
-
 			BigInteger gcd = BigInteger.GreatestCommonDivisor(Numerator, Denominator);
 
 			Numerator = Numerator / gcd;

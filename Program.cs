@@ -32,30 +32,30 @@ namespace GaussElimination
 				a.FillMatrix();
 				var x = new Matrix<Fraction>(size, 1);
 				x.FillMatrix();
+				
 				var b = a.Multiply(x);
 				Console.WriteLine(x);
 				Stopwatch stopwatch = new Stopwatch();
 
 				stopwatch.Start();
 
-				Console.WriteLine(x.Difference(elimination.Eliminate(a.ConcatenateWithVector(b))));
+				Console.WriteLine($"NONE:\n{x.Difference(elimination.Eliminate(a.ConcatenateWithVector(b)))}");
 
 				stopwatch.Stop();
 
-				Console.WriteLine($"NONE: \n{stopwatch.Elapsed}");
-
-				//Console.WriteLine($" NONE: {elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b))}");
+				//Console.WriteLine($"NONE: \n{stopwatch.Elapsed}");
 
 				stopwatch.Reset();
 
 				stopwatch.Start();
 
-				Console.WriteLine(x.Difference(elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b))));
+				Console.WriteLine($"NONE:\n{x.Difference(elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b)))}");
 
 				stopwatch.Stop();
 
-				Console.WriteLine($"PARTIAL: \n{stopwatch.Elapsed}");
-				//Console.WriteLine($" PARTIAL: {stopwatch.ElapsedMilliseconds}");
+				//Console.WriteLine($"PARTIAL: \n{stopwatch.Elapsed}");
+
+				Console.WriteLine($"FULL:\n{x.Difference(elimination.EliminateWithFullPivoting(a.ConcatenateWithVector(b)))}");
 			}
 		}
 			
