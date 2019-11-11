@@ -11,19 +11,21 @@ namespace GaussElimination
 			var results = Clone(matrix);
 
 			for (int i = 0; i < results.Rows - 1; i++)
-			{
-				//Console.WriteLine(i);
+				ZeroColumn(results, i);
 
-				for (int j = i + 1; j < results.Rows; j++)
-				{
-					T m = (dynamic)results.Fields[j, i] / (dynamic)results.Fields[i, i];
-
-					for (int k = 0; k < results.Columns; k++)
-						results.Fields[j, k] -= (dynamic)results.Fields[i, k] * m;
-				}
-				//Console.WriteLine(results);
-			}
 			return GetResults(results);
+		}
+
+		private void ZeroColumn(Matrix<T> results, int i)
+		{
+			for (int j = i + 1; j < results.Rows; j++)
+			{
+				T m = (dynamic)results.Fields[j, i] / (dynamic)results.Fields[i, i];
+
+				for (int k = 0; k < results.Columns; k++)
+					results.Fields[j, k] -= (dynamic)results.Fields[i, k] * m;
+			}
+
 		}
 
 		public Matrix<T> EliminateWithPartialPivoting(Matrix<T> matrix)
@@ -32,20 +34,11 @@ namespace GaussElimination
 
 			for (int i = 0; i < results.Rows - 1; i++)
 			{
-				//Console.WriteLine(i);
-
 				for (int k = i + 1; k < results.Rows; k++)
 					if (Abs(typeof(T), results.Fields[i, i]) < Abs(typeof(T), results.Fields[k, i]))
 						results.SwitchRows(k, i);
 
-				for (int j = i + 1; j < results.Rows; j++)
-				{
-					T m = (dynamic)results.Fields[j, i] / (dynamic)results.Fields[i, i];
-
-					for (int k = 0; k < results.Columns; k++)
-						results.Fields[j, k] -= (dynamic)results.Fields[i, k] * m;
-				}
-				//Console.WriteLine(results);
+				ZeroColumn(results, i);
 			}
 
 			return GetResults(results); ;
