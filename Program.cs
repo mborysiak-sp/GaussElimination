@@ -1,62 +1,77 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GaussElimination
 {
     class Program
     {
-        static void Main(string[] args)
+		private static void ExecuteNONE(Elimination<Fraction> elimination, Matrix<Fraction> a, Matrix<Fraction> b)
+		{
+			Stopwatch stopwatch = new Stopwatch();
+
+			stopwatch.Start();
+
+			Task.Factory.StartNew(() => elimination.Eliminate(a.ConcatenateWithVector(b)));
+
+			stopwatch.Stop();
+
+			Console.WriteLine($"NONE: \n{stopwatch.Elapsed}");
+		}
+
+		private static void ExecutePARTIAL(Elimination<Fraction> elimination, Matrix<Fraction> a, Matrix<Fraction> b)
+		{
+			Stopwatch stopwatch = new Stopwatch();
+
+			stopwatch.Start();
+
+			Task.Factory.StartNew(() => elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b)));
+
+			stopwatch.Stop();
+
+			Console.WriteLine($"PARTIAL: \n{stopwatch.Elapsed}");
+		}
+
+		private static void ExecuteFULL(Elimination<Fraction> elimination, Matrix<Fraction> a, Matrix<Fraction> b)
+		{
+			Stopwatch stopwatch = new Stopwatch();
+
+			stopwatch.Start();
+
+			Task.Factory.StartNew(() => elimination.EliminateWithFullPivoting(a.ConcatenateWithVector(b)));
+
+			stopwatch.Stop();
+
+			Console.WriteLine($"FULL: \n{stopwatch.Elapsed}");
+		}
+	
+		static void Main(string[] args)
         {
-			var size = 4;
+			var size = 1000;
 
-            //var a = new Matrix<Fraction>(size);
-			//a.FillMatrix();
-			//var x = new Matrix<Fraction>(size, 1);
-			//x.FillMatrix();
-			//var b = a.Multiply(x);
+			var elimination = new Elimination<double>();
 
-			var elimination = new Elimination<Fraction>();
-			//Console.WriteLine($"a: \n {a}");
-			//Console.WriteLine($"x: \n {x}");
-			//Console.WriteLine($"b: \n {b}");
+			var a = new Matrix<double>(size);
 
-			//Console.WriteLine($"Simple: \n {elimination.Eliminate(a.ConcatenateWithVector(b))}");
-			//Console.Out.WriteLine(elimination.Eliminate(a.ConcatenateWithVector(b)));
-			//Console.WriteLine($"Pivot: \n {elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b))}");
-			//Console.Out.WriteLine(elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(a.Multiply(x))));
-			//Console.Out.WriteLine(elimination.EliminateWithFullPivoting(m));
+			a.FillMatrix();
 
-			for (int i = 0; i < 1; i++)
-			{
-				var a = new Matrix<Fraction>(size);
-				a.FillMatrix();
-				var x = new Matrix<Fraction>(size, 1);
-				x.FillMatrix();
-				
-				var b = a.Multiply(x);
-				Console.WriteLine(x);
-				Stopwatch stopwatch = new Stopwatch();
+			var x = new Matrix<double>(size, 1);
 
-				stopwatch.Start();
+			x.FillMatrix();
 
-				Console.WriteLine($"NONE:\n{x.Difference(elimination.Eliminate(a.ConcatenateWithVector(b)))}");
+			var b = a.Multiply(x);
 
-				stopwatch.Stop();
+			File.WriteAllText(@"C:\Users\marci\Tests\none_double.txt", (x.Difference(elimination.Eliminate(a.ConcatenateWithVector(b)))).ToString());
+			File.WriteAllText(@"C:\Users\marci\Tests\partial_double.txt", (x.Difference(elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b)))).ToString());
+			File.WriteAllText(@"C:\Users\marci\Tests\full_double.txt", (x.Difference(elimination.EliminateWithFullPivoting(a.ConcatenateWithVector(b)))).ToString());
+			//stopwatch.Stop();
 
-				//Console.WriteLine($"NONE: \n{stopwatch.Elapsed}");
+			//Console.WriteLine($"FULL: \n{stopwatch.Elapsed}");
 
-				stopwatch.Reset();
 
-				stopwatch.Start();
 
-				Console.WriteLine($"NONE:\n{x.Difference(elimination.EliminateWithPartialPivoting(a.ConcatenateWithVector(b)))}");
-
-				stopwatch.Stop();
-
-				//Console.WriteLine($"PARTIAL: \n{stopwatch.Elapsed}");
-
-				Console.WriteLine($"FULL:\n{x.Difference(elimination.EliminateWithFullPivoting(a.ConcatenateWithVector(b)))}");
-			}
 		}
 			
 

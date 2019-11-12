@@ -25,6 +25,11 @@ namespace GaussElimination
 			else return null;
 		}
 
+		public void WriteToFile(string fileName, string text)
+		{
+			File.WriteAllText(@"C:\Users\marci\Tests" + fileName, text);
+		}
+
 		private Fraction AbsForFraction(Fraction value)
 		{
 			if (value.Numerator < 0)

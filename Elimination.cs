@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
+//https://www.bragitoff.com/2018/02/gauss-elimination-c-program/
+//https://www.sanfoundry.com/java-program-gaussian-elimination-algorithm/
+
 namespace GaussElimination
 {
 	class Elimination<T> : Support where T : new()
@@ -11,14 +14,17 @@ namespace GaussElimination
 			var results = Clone(matrix);
 
 			for (int i = 0; i < results.Rows - 1; i++)
+			{
+				Console.WriteLine($"{i} / {results.Rows} DONE");
 				ZeroColumn(results, i);
+			}
 
 			return GetResults(results);
 		}
 
 		private void ZeroColumn(Matrix<T> results, int i)
 		{
-			for (int j = i + 1; j < results.Rows; j++)
+			for (int j = i + 1; j < results.Rows; j++) 
 			{
 				T m = (dynamic)results.Fields[j, i] / (dynamic)results.Fields[i, i];
 
@@ -34,10 +40,8 @@ namespace GaussElimination
 
 			for (int i = 0; i < results.Rows - 1; i++)
 			{
-				for (int j = i; j < results.Rows; j++)
-					if (Abs(typeof(T), results.Fields[i, i]) < Abs(typeof(T), results.Fields[j, i]))
-						results.SwitchRows(i, j);
-
+				Console.WriteLine($"{i} / {results.Rows} DONE");
+				PartialPivot(results, i);
 				ZeroColumn(results, i);
 			}
 
@@ -49,50 +53,26 @@ namespace GaussElimination
 			var results = Clone(matrix);
 			var swapList = new List<Tuple<int, int>>();
 
-			for (int i = 0; i < results.Rows; i++)
+			for (int i = 0; i < matrix.Rows - 1; i++)
 			{
-				for (int j = i; j < results.Rows; j++)
-				{
-					for (int k = i; k < results.Columns - 1; k++)
-					{
-						if (Abs(typeof(T), results.Fields[i, i]) < Abs(typeof(T), results.Fields[j, k]))
-						{
-							//Console.WriteLine(results);
-
-							//Console.WriteLine($"{results.Fields[i, i]} < {results.Fields[j, k]}");
-
-							//Console.WriteLine($"Switching columns {i},{k}");
-
-							swapList.Add(new Tuple<int, int>(i, k));
-
-							results.SwitchColumns(i, k);
-
-							//Console.WriteLine($"Switching rows {i},{j}");
-
-							results.SwitchRows(i, j);
-
-							//Console.WriteLine(results);
-						}
-					}
-				}
-	
+				Console.WriteLine($"{i} / {results.Rows} DONE");
+				FullPivot(results, i, swapList);
 				ZeroColumn(results, i);
 			}
 
-			return GetResults(FixColumns(results, swapList));
+			return FixColumns(GetResults(results), swapList);
 		}
 
-		//https://www.bragitoff.com/2018/02/gauss-elimination-c-program/
-		//https://www.sanfoundry.com/java-program-gaussian-elimination-algorithm/
-
-		private Matrix<T> FixColumns(Matrix<T> matrix, List<Tuple<int, int>> swapList)
+		private Matrix<T> FixColumns(Matrix<T> results, List<Tuple<int, int>> swapList)
 		{
-			T[] outArr = new T[matrix.Rows];
 
-			for (int i = 0; i < matrix.Rows; i++)
-				outArr[i] = matrix.Fields[i, matrix.Columns - 1];
+			T[] outArr = new T[results.Rows];
+
+			for (int i = 0; i < results.Rows; i++)
+				outArr[i] = results.Fields[i, results.Columns - 1];
 
 			swapList.Reverse();
+
 			foreach (Tuple<int, int> swap in swapList)
 			{
 				T temp = outArr[swap.Item1];
@@ -100,10 +80,12 @@ namespace GaussElimination
 				outArr[swap.Item2] = temp;
 			}
 
-			for (int i = 0; i < matrix.Rows; i++)
-				matrix.Fields[i, matrix.Columns - 1] = outArr[i];
 
-			return matrix;
+			for (int i = 0; i < results.Rows; i++)
+				results.Fields[i, results.Columns - 1] = outArr[i];
+
+
+			return results;
 		}
 
 		private Matrix<T> GetResults(Matrix<T> matrix)
@@ -124,56 +106,29 @@ namespace GaussElimination
 		}
 
 
-		private int GetPartialPivot(Matrix<T> matrix)
+		private void PartialPivot(Matrix<T> matrix, int p)
 		{
-			T max = Abs(typeof(T), matrix.Fields[0, 0]);
 
-			int position = 0;
-
-			for (int i = 1; i < matrix.Rows; i++)
-			{
-				if (Abs(typeof(T), matrix.Fields[i, 0]) > max)
-				{
-					max = Abs(typeof(T), matrix.Fields[i, 0]);
-
-					position = i;
-				}
-			}
-
-			return position;
+			for (int j = p; j < matrix.Rows; j++)
+				if (Abs(typeof(T), matrix.Fields[p, p]) < Abs(typeof(T), matrix.Fields[j, p]))
+					matrix.SwitchRows(p, j);
 		}
 
-		private Tuple<int, int> GetFullPivot(Matrix<T> matrix)
+		private void FullPivot(Matrix<T> matrix, int p, List<Tuple<int, int>> swapList)
 		{
-			T max = Math.Abs((dynamic)matrix.Fields[0, 0]);
-
-			int positionI = 0, positionJ = 0;
-
-			for (int i = 0; i < matrix.Rows; i++)
+			for (int j = p; j < matrix.Rows; j++)
 			{
-				for (int j = 0; j < matrix.Columns; j++)
+				for (int k = p; k < matrix.Rows; k++)
 				{
-					if (Math.Abs((dynamic)matrix.Fields[i, j]) > max)
+					if (Abs(typeof(T), matrix.Fields[p, p]) < Abs(typeof(T), matrix.Fields[j, k]))
 					{
-						max = Math.Abs((dynamic)matrix.Fields[i, j]);
-
-						positionI = i;
-						positionJ = j;
+						matrix.SwitchColumns(p, j);
+						swapList.Add(new Tuple<int, int>(p, j));
+						matrix.SwitchRows(p, k);
 					}
 				}
 			}
-
-			return new Tuple<int, int>(positionI, positionJ);
 		}
-
-		private void ReductRows(Matrix<T> matrix, int row1, int row2)
-		{
-			for (int i = 0; i < matrix.Columns; i++)
-			{
-				T m = (dynamic)matrix.Fields[row2, row2] / (dynamic)matrix.Fields[row2, row1];
-
-				matrix.Fields[row2, i] -= matrix.Fields[row1, i] * (dynamic)m;
-			}
-		}
-	}
+	} 
 }
+

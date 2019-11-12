@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Numerics;
 using System.Text;
 
@@ -107,18 +108,6 @@ namespace GaussElimination
 
 				Fields[i, col2] = temp;
 			}
-		}
-
-		public bool Equals(Matrix<T> matrix)
-		{
-			if (Rows != matrix.Rows && Columns != matrix.Columns)
-				return false;
-			else
-				for (int i = 0; i < Rows; i++)
-					for (int j = 0; j < Columns; j++)
-						if ((dynamic)Fields[i, j] != (dynamic)matrix.Fields[i, j])
-							return false;
-			return true;
 		}
 
 		public override string ToString()
