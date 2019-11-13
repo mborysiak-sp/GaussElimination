@@ -49,7 +49,7 @@ namespace GaussianElimination
 
 			stopwatch.Stop();
 
-			File.WriteAllText(@$"C:\Users\marci\Tests\full_{typeof(T)}{x.Rows}.txt", ("FULL: \nTime:" + stopwatch.Elapsed + "\n" + x.Difference(result).ToString()));
+			File.WriteAllText(@$"C:\Users\marci\Tests\full_{typeof(T)}{x.Rows}.txt", ("FULL: \nTime:" + stopwatch.Elapsed));
 		}
 	}
 }

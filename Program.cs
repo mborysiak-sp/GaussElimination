@@ -25,12 +25,8 @@ namespace GaussElimination
 
 			x.FillMatrix();
 
-			Console.Out.WriteLine(a);
-			Console.Out.WriteLine(x);
-
 			var b = a.Multiply(x);
 
-			Console.Out.WriteLine(b);
 			var eliminationFloat = new Elimination<float>();
 
 			var aFloat = new Matrix<float>(size);
@@ -69,16 +65,16 @@ namespace GaussElimination
 			var testsFloat= new Tests<float>();
 			var testsDouble = new Tests<double>();
 
-			//Parallel.Invoke(
-			//	() => testsFraction.ExecuteNONE(eliminationFraction, x, a, b),
-			//	() => testsFraction.ExecutePARTIAL(eliminationFraction, x, a, b),
-			//	() => testsFraction.ExecuteFULL(eliminationFraction, x, a, b),
-			//	() => testsFloat.ExecuteNONE(eliminationFloat, xFloat, aFloat, bFloat),
-			//	() => testsFloat.ExecutePARTIAL(eliminationFloat, xFloat, aFloat, bFloat),
-			//	() => testsFloat.ExecuteFULL(eliminationFloat, xFloat, aFloat, bFloat),
-			//	() => testsDouble.ExecuteNONE(eliminationDouble, xDouble, aDouble, bDouble),
-			//	() => testsDouble.ExecutePARTIAL(eliminationDouble, xDouble, aDouble, bDouble));
-			//	() => testsDouble.ExecuteFULL(eliminationDouble, xDouble, aDouble, bDouble));
+			Parallel.Invoke(
+				() => testsFraction.ExecuteNONE(eliminationFraction, x, a, b),
+				() => testsFraction.ExecutePARTIAL(eliminationFraction, x, a, b),
+				() => testsFraction.ExecuteFULL(eliminationFraction, x, a, b),
+				() => testsFloat.ExecuteNONE(eliminationFloat, xFloat, aFloat, bFloat),
+				() => testsFloat.ExecutePARTIAL(eliminationFloat, xFloat, aFloat, bFloat),
+				() => testsFloat.ExecuteFULL(eliminationFloat, xFloat, aFloat, bFloat),
+				() => testsDouble.ExecuteNONE(eliminationDouble, xDouble, aDouble, bDouble),
+				() => testsDouble.ExecutePARTIAL(eliminationDouble, xDouble, aDouble, bDouble));
+			() => testsDouble.ExecuteFULL(eliminationDouble, xDouble, aDouble, bDouble));
 		}
 	}
 }
