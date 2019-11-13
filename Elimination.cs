@@ -7,7 +7,7 @@ using System.Text;
 
 namespace GaussElimination
 {
-	class Elimination<T> : Support where T : new()
+	public class Elimination<T> : Support where T : new()
 	{
 		public Matrix<T> Eliminate(Matrix<T> matrix)
 		{
@@ -66,24 +66,22 @@ namespace GaussElimination
 		private Matrix<T> FixColumns(Matrix<T> results, List<Tuple<int, int>> swapList)
 		{
 
-			T[] outArr = new T[results.Rows];
+			T[] order = new T[results.Rows];
 
 			for (int i = 0; i < results.Rows; i++)
-				outArr[i] = results.Fields[i, results.Columns - 1];
+				order[i] = results.Fields[i, results.Columns - 1];
 
 			swapList.Reverse();
 
 			foreach (Tuple<int, int> swap in swapList)
 			{
-				T temp = outArr[swap.Item1];
-				outArr[swap.Item1] = outArr[swap.Item2];
-				outArr[swap.Item2] = temp;
+				T temp = order[swap.Item1];
+				order[swap.Item1] = order[swap.Item2];
+				order[swap.Item2] = temp;
 			}
 
-
 			for (int i = 0; i < results.Rows; i++)
-				results.Fields[i, results.Columns - 1] = outArr[i];
-
+				results.Fields[i, results.Columns - 1] = order[i];
 
 			return results;
 		}

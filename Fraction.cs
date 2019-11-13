@@ -158,8 +158,18 @@ namespace GaussElimination
                 return true;
             else return false;
         }
+		
+		public static explicit operator double(Fraction x)
+		{
+			return (double) x.Numerator / (double) x.Denominator;
+		}
 
-        public override string ToString()
+		public static explicit operator float(Fraction x)
+		{
+			return (float) x.Numerator / (float) x.Denominator;
+		}
+
+		public override string ToString()
         {
 			Simplify();
 

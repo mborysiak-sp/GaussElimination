@@ -110,6 +110,24 @@ namespace GaussElimination
 			}
 		}
 
+		//public static explicit operator Matrix<double>(Matrix<Fraction> x)
+		//{
+		//	var result = new Matrix<double>(x.Rows, x.Columns);
+
+			
+		//	return result;
+		//}
+
+		//public static explicit operator Matrix<float>(Matrix<Fraction> x)
+		//{
+		//	var result = new Matrix<float>(x.Rows, x.Columns);
+
+		//	for (int i = 0; i < x.Rows; i++)
+		//		for (int j = 0; j < x.Columns; j++)
+		//			result.Fields[i, j] = (float) x.Fields[i, j];
+		//	return result;
+		//}
+
 		public override string ToString()
 		{
 			string result = "";
