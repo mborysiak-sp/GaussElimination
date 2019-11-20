@@ -40,7 +40,6 @@ namespace GaussElimination
 
 			for (int i = 0; i < results.Rows - 1; i++)
 			{
-				Console.WriteLine($"{i} / {results.Rows} DONE");
 				PartialPivot(results, i);
 				ZeroColumn(results, i);
 			}
@@ -55,7 +54,6 @@ namespace GaussElimination
 
 			for (int i = 0; i < matrix.Rows - 1; i++)
 			{
-				Console.WriteLine($"{i} / {results.Rows} DONE");
 				FullPivot(results, i, swapList);
 				ZeroColumn(results, i);
 			}

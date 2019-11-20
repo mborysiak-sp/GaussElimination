@@ -4,9 +4,10 @@ using System.Text;
 using System.Numerics;
 using System.Globalization;
 
+//http://csharphelper.com/blog/2015/06/make-a-fraction-class-in-c/
+
 namespace GaussElimination
 {
-	//http://csharphelper.com/blog/2015/06/make-a-fraction-class-in-c/
 	[Serializable]
 	public class Fraction
     {

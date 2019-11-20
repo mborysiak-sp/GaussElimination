@@ -13,7 +13,7 @@ namespace GaussElimination
     {
 		static void Main(string[] args)
         {
-			var size = 2;
+			var size = 500;
 
 			var eliminationFraction = new Elimination<Fraction>();
 
@@ -73,8 +73,8 @@ namespace GaussElimination
 				() => testsFloat.ExecutePARTIAL(eliminationFloat, xFloat, aFloat, bFloat),
 				() => testsFloat.ExecuteFULL(eliminationFloat, xFloat, aFloat, bFloat),
 				() => testsDouble.ExecuteNONE(eliminationDouble, xDouble, aDouble, bDouble),
-				() => testsDouble.ExecutePARTIAL(eliminationDouble, xDouble, aDouble, bDouble));
-			() => testsDouble.ExecuteFULL(eliminationDouble, xDouble, aDouble, bDouble));
+				() => testsDouble.ExecutePARTIAL(eliminationDouble, xDouble, aDouble, bDouble),
+				() => testsDouble.ExecuteFULL(eliminationDouble, xDouble, aDouble, bDouble));
 		}
 	}
 }

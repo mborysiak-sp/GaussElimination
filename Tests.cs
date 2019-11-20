@@ -22,7 +22,7 @@ namespace GaussianElimination
 
 			stopwatch.Stop();
 
-			File.WriteAllText(@$"C:\Users\marci\Tests\none_{typeof(T)}{x.Rows}.txt", ("NONE: \nTime:" + stopwatch.Elapsed));
+			File.WriteAllText(@$"C:\Users\marci\Tests\none_{typeof(T)}{x.Rows}.txt", "NONE: \nTime:" + stopwatch.Elapsed + x.Difference(result));
 		}
 
 		public void ExecutePARTIAL(Elimination<T> elimination, Matrix<T> x, Matrix<T> a, Matrix<T> b)
@@ -35,7 +35,7 @@ namespace GaussianElimination
 
 			stopwatch.Stop();
 
-			File.WriteAllText(@$"C:\Users\marci\Tests\partial_{typeof(T)}{x.Rows}.txt", ("PARTIAL: \nTime:" + stopwatch.Elapsed));
+			File.WriteAllText(@$"C:\Users\marci\Tests\partial_{typeof(T)}{x.Rows}.txt", "PARTIAL: \nTime:" + stopwatch.Elapsed + x.Difference(result));
 
 		}
 
@@ -49,7 +49,7 @@ namespace GaussianElimination
 
 			stopwatch.Stop();
 
-			File.WriteAllText(@$"C:\Users\marci\Tests\full_{typeof(T)}{x.Rows}.txt", ("FULL: \nTime:" + stopwatch.Elapsed));
+			File.WriteAllText(@$"C:\Users\marci\Tests\full_{typeof(T)}{x.Rows}.txt", "FULL: \nTime:" + stopwatch.Elapsed + x.Difference(result));
 		}
 	}
 }
